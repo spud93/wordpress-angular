@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { PagesService } from './pages.service';
 
@@ -8,10 +9,11 @@ import { PagesService } from './pages.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
     private pageSlug: string;
-    private paramsSubscription: any;
-    private pagesSubscription: any;
+    private paramsSubscription: Subscription;
+    private pageSubscription: Subscription;
     pageTitle: string;
     content: string;
+    navigationLinks = [];
     pages = {};
 
     constructor(private route: ActivatedRoute, private pagesService: PagesService) {}
@@ -21,16 +23,16 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.paramsSubscription = this.route.params.subscribe(params => {
             this.slug = params[SLUG_KEY];
         });
-
         this.getPageDetails();
     }
 
     getPageDetails() {
-      this.pagesSubscription = this.pagesService
+      this.pageSubscription = this.pagesService
                                    .getPages()
                                    .subscribe(
                                                res => {
                                                     for (const r of res) {
+                                                        this.navigationLinks = res;
                                                         this.pages[r.slug] = r;
                                                         if (!this.slug) {
                                                           this.slug = r.slug;
@@ -51,7 +53,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         return this.pageSlug;
     }
 
-    refresh_values(slug: string = this.slug) {
+    refresh_values(slug: string = this.slug): void {
         if (this.pages[slug] !== undefined) {
             this.pageTitle = this.pages[slug].title.rendered;
             this.content = this.pages[slug].content.rendered;
@@ -60,7 +62,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.paramsSubscription.unsubscribe();
-        this.pagesSubscription.unsubscribe();
+        this.pageSubscription.unsubscribe();
     }
 
 }
