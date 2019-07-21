@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_root: 'localhost:8888/wordpress'
+  api_root: 'localhost:8888/wordpress' // change to your dev Wordpress
 };
 
 /*
