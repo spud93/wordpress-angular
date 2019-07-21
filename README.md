@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is a basic Wordpress Theme for integrating Angular with Wordpress using the Wordpress REST API.
+This is a basic Wordpress Theme for integrating Angular with Wordpress using the Wordpress REST API. Currently only supports pages, not posts.
 
 ## Building
 To build, run `ng build` in the root directory (`ng build --prod` for prod builds).
